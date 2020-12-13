@@ -8,6 +8,48 @@ import testservergrpc.CommunicationOuterClass;
 
 @GrpcService
 public class CommunicationService extends CommunicationGrpc.CommunicationImplBase {
+/*
+    private List<CommunicationOuterClass.Numbers> getOrCreateNumbers(int numbers) {
+        List<RouteNote> notes = Collections.synchronizedList(new ArrayList<RouteNote>());
+        List<RouteNote> prevNotes = routeNotes.putIfAbsent(location, notes);
+        return prevNotes != null ? prevNotes : notes;
+    }
+
+ */
+
+    @Override
+    public StreamObserver<CommunicationOuterClass.Numbers> exchangeNumbers(StreamObserver<CommunicationOuterClass.Numbers> responseObserver) {
+
+        System.out.println("Exchanging Numbers");
+
+        return new StreamObserver<CommunicationOuterClass.Numbers>() {
+            int count = 0;
+            int forSend = 0;
+
+
+            @Override
+            public void onNext(CommunicationOuterClass.Numbers numbers) {
+                System.out.println("we Got number: " + numbers.getNumber());
+                //send back nubmer + 1
+                System.out.println("sending back number + 1 : " + (numbers.getNumber() + 1));
+                responseObserver.onNext(CommunicationOuterClass.Numbers.newBuilder().setNumber(numbers.getNumber() + 1).build());
+
+            }
+
+            @Override
+            public void onError(Throwable throwable) {
+                //here we implement onError code
+                System.out.println("error");
+            }
+
+            @Override
+            public void onCompleted() {
+                System.out.println("exchange completed");
+                responseObserver.onCompleted();
+            }
+        };
+
+    }
 
     @Override
     public void getNumbers(CommunicationOuterClass.Numbers request, StreamObserver<CommunicationOuterClass.Numbers> responseObserver) {
