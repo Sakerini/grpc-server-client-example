@@ -4,6 +4,15 @@ package testservergrpc;
 
 service Communication {
   rpc login(AccountInformation) returns (LoginResponse) {}
+  rpc sendNumbers(stream Numbers) returns (BasicResponse) {}
+}
+
+message Numbers {
+  int32 number = 1;
+}
+
+message BasicResponse {
+  string status = 1;
 }
 
 message AccountInformation {
