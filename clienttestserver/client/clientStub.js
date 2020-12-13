@@ -13,6 +13,9 @@ var packageDefinition = protoLoader.loadSync(PROTO_PATH, {
 
 const protoDescriptor = grpc.loadPackageDefinition(packageDefinition);
 
+console.log(protoDescriptor);
+
+
 const clientStub = new protoDescriptor.testservergrpc.Communication(
     "localhost:9090",
     grpc.credentials.createInsecure()
