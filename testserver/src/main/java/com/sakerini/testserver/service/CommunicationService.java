@@ -9,6 +9,15 @@ import testservergrpc.CommunicationOuterClass;
 @GrpcService
 public class CommunicationService extends CommunicationGrpc.CommunicationImplBase {
 
+    @Override
+    public void getNumbers(CommunicationOuterClass.Numbers request, StreamObserver<CommunicationOuterClass.Numbers> responseObserver) {
+        System.out.println("Recieved stream request for " + request.getNumber() + " numbers");
+        for (int i = 1; i <= request.getNumber(); i++) {
+            CommunicationOuterClass.Numbers numbers = CommunicationOuterClass.Numbers.newBuilder().setNumber(i).build();
+            responseObserver.onNext(numbers);
+        }
+        responseObserver.onCompleted();
+    }
 
     // Client - Side streaming
     @Override

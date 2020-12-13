@@ -5,6 +5,7 @@ package testservergrpc;
 service Communication {
   rpc login(AccountInformation) returns (LoginResponse) {}
   rpc sendNumbers(stream Numbers) returns (BasicResponse) {}
+  rpc getNumbers(Numbers) returns (stream Numbers) {}
 }
 
 message Numbers {

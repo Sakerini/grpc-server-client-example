@@ -77,6 +77,32 @@ app.get("/sendNumbersStream", function(request, response) {
     });
 });
 
+//Server side stream -- server sends numbers to client
+app.get("/getNumbers", function(request, response) { 
+    let numbers = {
+        number: 5
+    }
+
+    var call = clientStub.getNumbers(numbers);
+    call.on('data', function(number) {
+        console.log(number.number)
+    });
+
+    call.on('end', function(){
+        console.log('The server has finished sending')
+    })
+
+    call.on('error', function(e){
+        console.log(e)
+        //error happened
+    })
+
+    call.on('stats', function(status) {
+        console.log(status)
+        //process status
+    })
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log("Server running at port %d", PORT);
